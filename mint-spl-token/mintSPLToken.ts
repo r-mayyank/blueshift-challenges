@@ -44,7 +44,7 @@ const feePayer = Keypair.fromSecretKey(
 
 //Create a connection to the RPC endpoint
 const connection = new Connection(
-    process.env.RPC_ENDPOINT,
+    process.env.RPC_ENDPOINT || "https://api.devnet.solana.com",
     "confirmed"
 );
 
@@ -76,7 +76,7 @@ async function main() {
             mint.publicKey,
             6,
             feePayer.publicKey,
-            null,
+            feePayer.publicKey,
             TOKEN_PROGRAM_ID
         )
 
@@ -97,7 +97,7 @@ async function main() {
 
 
         // Mint 21,000,000 tokens to the associated token account
-        const mintAmount = 21000000
+        const mintAmount = BigInt(21000000 * 10 ** 6); // 21 million tokens with 6 decimals
         const mintToCheckedIx = createMintToCheckedInstruction(
             mint.publicKey,
             associatedTokenAccount,
